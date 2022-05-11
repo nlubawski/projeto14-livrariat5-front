@@ -12,6 +12,7 @@ function App(){
         <BrowserRouter>
         <Routes>
             <Route path='/cadastro' element={<TelaCadastro />} />
+            <Route path='/' />
         </Routes>
         </BrowserRouter>
         </UsuarioContext.Provider>
