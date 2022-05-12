@@ -1,42 +1,40 @@
-import { useState} from "react";
+
+import { useState, useContext} from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { ThreeDots } from 'react-loader-spinner';
 import img from "./../imagens/livrariat5logo.png";
+import UsuarioContext from "./Contextos/UsuarioContext"
 
-function TelaCadastro() {
-  const [name, setName] = useState("");
+function TelaLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const {setCliente} = useContext(UsuarioContext);
 
   function cadastrar(event) {
     event.preventDefault();
     setLoading(true);
 
     const URL =
-      "http://localhost:5000/cadastrar";
+      "http://localhost:5000/login";
 
     const promise = axios.post(URL, {
-      name,
       email,
       password,
-      confirmPassword,
     });
 
     promise.then((response) => {
-      const { data } = { response };
+      const {name, token} = { response };
+      setCliente({name, token});
       setTimeout(() => setLoading(false), 3000);
       navigate('/')
     });
     promise.catch((err) => {
-      setName("");
       setEmail("");
       setPassword("");
-      setConfirmPassword("");
       console.log(err.response)
       setTimeout(() => setLoading(false), 3000);
     });
@@ -47,14 +45,6 @@ function TelaCadastro() {
       <Container>
         <Logo src={img}/>
         <Formulario onSubmit={cadastrar}>
-          <Input
-            type="text"
-            placeholder="Nome"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            disabled={loading ? true : false}
-          />
           <Input
             type="email"
             placeholder="Email"
@@ -71,18 +61,10 @@ function TelaCadastro() {
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading ? true : false}
           />
-          <Input
-            type="password"
-            placeholder="Confirme sua senha"
-            required
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            disabled={loading ? true : false}
-          />
           <Botao type="submit">{loading ? <ThreeDots color="#fff" /> : 'Entrar'}
           </Botao>
           <Texto>
-            <Link to="/login">Já tem uma conta? Entre agora!</Link>
+            <Link to="/cadastro">Não tem uma conta? Crie agora!</Link>
           </Texto>
         </Formulario>
       </Container>
@@ -150,7 +132,6 @@ const Logo = styled.img`
 width: 35%;
 border-radius: 5px;
 padding-bottom: 15px;
-
 `;
 
-export default TelaCadastro;
+export default TelaLogin;
