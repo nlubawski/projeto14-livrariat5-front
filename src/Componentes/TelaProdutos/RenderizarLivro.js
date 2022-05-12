@@ -3,16 +3,15 @@ import styled from "styled-components";
 
 function RenderizarLivro (props) {
 
-    const {titulo, imagem, preco, id} = props;    
+    const {title, price, id} = props;    
 
     const navigate = useNavigate();
 
     return (
         <Border onClick={() => navigate(`/products/${id}`)}>
-            <p>{titulo}</p>
-            <p>{imagem}</p>
-            <p>{preco}</p>
-            <p>{id}</p>
+            <p>{title}</p>
+            {/* <p>{imagem}</p> */}
+            <p>{price}</p>
         </Border>
     )
 

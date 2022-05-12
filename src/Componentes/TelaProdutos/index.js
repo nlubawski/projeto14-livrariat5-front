@@ -30,10 +30,10 @@ function TelaProdutos() {
                 </Section>
                 <Books>
                     {produtos.map(produto => {
-                        const { titulo, imagem, preco, id, _id } = produto;
+                        const { title, price, id, _id } = produto;
                         return (
-                            <RenderizarLivro key={id} imagem={imagem}
-                                preco={preco} titulo={titulo} id={_id}/>
+                            <RenderizarLivro key={id}
+                                price={price} title={title} id={_id}/>
                         )
                     })}
                 </Books>
