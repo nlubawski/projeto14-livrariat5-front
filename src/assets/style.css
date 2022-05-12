@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+    --cor-header: #C3CFD9;
+   --cor-fundo: #FFFFFF;
+   --cor-footer: #DFE6ED;
+   --cor-laranja: #E8833A;
+   --cor-texto: #293845;
+   --cor-borda: #9EADBA;
+   --cor-avaiable: #C3CFD9;
+   --cor-avaiable-border: #7B8B99;
+   --cor-selected: #8DD7CF;
+   --cor-selected-border: #1AAE9E;
+   --cor-unavaiable: #FBE192;
+   --cor-unavaiable-border: #F7C52B;
+   --cor-success: #247A6B;
+}
