@@ -7,6 +7,7 @@ import TelaProdutos from './TelaProdutos/'
 import TelaLivro from "./TelaLivro"
 import TelaCarrinho from "./TelaCarrinho"
 import UsuarioContext from "./Contextos/UsuarioContext"
+import TelaCheckout from "./TelaCheckout";
 
 function App(){
     const [cliente, setCliente] = useState(null);
@@ -21,6 +22,8 @@ function App(){
             <Route path='/' element={<TelaProdutos />} />
             <Route path="/products/:livroId" element={<TelaLivro />} />
             <Route path='/carrinho' element={<TelaCarrinho />} />
+            <Route path='/checkout' element={<TelaCheckout />} />
+
         </Routes>
         </BrowserRouter>
         </UsuarioContext.Provider>
