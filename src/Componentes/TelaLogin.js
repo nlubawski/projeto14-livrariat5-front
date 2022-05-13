@@ -12,7 +12,7 @@ function TelaLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {setCliente} = useContext(UsuarioContext);
+  const {cliente, setCliente} = useContext(UsuarioContext);
 
   function cadastrar(event) {
     event.preventDefault();
@@ -27,10 +27,16 @@ function TelaLogin() {
     });
 
     promise.then((response) => {
-      const {name, token} = { response };
+      // const {name, token} = { response };
+      // Mudanças feitas por mim 
+      const {data} = response;
+      const {name, token} = data;
+      console.log("token login:", token);
+      //
       setCliente({name, token});
       setTimeout(() => setLoading(false), 3000);
-      navigate('/')
+      localStorage.setItem("token", token);
+      navigate('/');
     });
     promise.catch((err) => {
       setEmail("");

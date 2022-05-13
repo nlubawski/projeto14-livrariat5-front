@@ -25,8 +25,6 @@ function HeaderCheckout
                         <ion-icon onClick={() => encerrarSessao()} name="log-out"></ion-icon>
                     </IconLogout>
                 </Container>
-
-
             </Head>
         </>
     )
@@ -37,6 +35,7 @@ const Head = styled.div`
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 5;
 `
 const Container = styled.div`
     background-color: lightgreen;
