@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Header from "../Layout/Header";
+import HeaderProdutos from "../Layout/HeaderProdutos";
 import RenderizarLivro from "./RenderizarLivro";
 
 function TelaProdutos() {
 
     const [produtos, setProdutos] = useState([]);
+
+    const categoria1 = "Desenvolvimento Pessoal";
+    const categoria2 = "Ficção";
+    const categoria3 = "Investimentos";
 
     const servidor = "http://localhost:5000/products";
 
@@ -15,7 +19,6 @@ function TelaProdutos() {
         const promise = axios.get(servidor);
         promise.then((response) => {
             const { data } = response;
-            console.log(data);
             setProdutos(data);
         })
         promise.catch(() => console.log("deu ruim"));
@@ -23,20 +26,50 @@ function TelaProdutos() {
 
     return (
         <>
-            <Header />
+            <HeaderProdutos />
             <Container>
-                <Section>
-                    <h2>Categoria de livro</h2>
-                </Section>
-                <Books>
-                    {produtos.map(produto => {
-                        const { title, image, author, id, _id } = produto;
+                {produtos.map(produto => {
+                    const { title, image, author, id, _id, status } = produto;
+                    if (status === categoria1) {
                         return (
-                            <RenderizarLivro key={id} image={image}
-                            author={author} title={title} id={_id}/>
+                            <>
+                                <Section>
+                                    <h2>{categoria1}</h2>
+                                </Section>
+                                <Books>
+                                    <RenderizarLivro key={id} image={image}
+                                        author={author} title={title} id={_id} />
+                                </Books>
+                            </>
                         )
-                    })}
-                </Books>
+                    }
+                    if (status === categoria2) {
+                        return (
+                            <>
+                                <Section> 
+                                    <h2>{categoria2}</h2>
+                                </Section>
+                                <Books>
+                                    <RenderizarLivro key={id} image={image}
+                                        author={author} title={title} id={_id} />
+                                </Books>
+                            </>
+                        )
+                    }
+                    if (status === categoria3) {
+                        return (
+                            <>
+                                <Section>
+                                    <h2>{categoria3}</h2>
+                                </Section>
+                                <Books>
+                                    <RenderizarLivro key={id} image={image}
+                                        author={author} title={title} id={_id} />
+                                </Books>
+                            </>
+                        )
+                    }
+                })}
             </Container>
 
         </>
@@ -64,6 +97,7 @@ const Books = styled.div`
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
+    gap: 10px;
 `
 
 export default TelaProdutos
