@@ -30,12 +30,15 @@ function TelaLogin() {
       // const {name, token} = { response };
       // Mudanças feitas por mim 
       const {data} = response;
-      const {name, token} = data;
+      // console.log(data);
+      const {name, token, clienteId} = data;
       console.log("token login:", token);
       //
-      setCliente({name, token});
+      setCliente({name, token, clienteId});
       setTimeout(() => setLoading(false), 3000);
       localStorage.setItem("token", token);
+      localStorage.setItem("id", clienteId);
+
       navigate('/');
     });
     promise.catch((err) => {

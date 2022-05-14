@@ -11,50 +11,50 @@ function DadosComprador() {
 
     const tokenLS = localStorage.getItem("token");
 
+    const idLS = localStorage.getItem("id");
+
+    console.log("id do cliente: ",idLS);
+
     // console.log("token: ",tokenLS);
 
     const [user, setUser] = useState([]);
 
-    const servidor = "http://localhost:5000/checkout";
+    const [addresses, setAddresses] = useState([]);
+
+    const servidorCheckout = "http://localhost:5000/checkout";
+
+    const servidorAddress = "http://localhost:5000/address";
 
     const config = {
         headers: {
-            "Authorization": `Bearer ${tokenLS}`
+            "Authorization": `Bearer ${tokenLS}`,
+            "id": idLS
         }
     }
 
     useEffect(() => {
-        const promise = axios.get(servidor,config);
+        const promise = axios.get(servidorCheckout,config);
         promise.then((response) => {
             const { data } = response;
             setUser(data);
             // TIRAR DEPOIS ESSE CONSOLE
-            console.log("Deu bom a requisição")
-            console.log(data);
+            // console.log("Deu bom a requisição")
+            // console.log(data);
         })
-        promise.catch(() => console.log("deu ruim"));
+        promise.catch(() => console.log("deu ruim baixar as informações do usuário"));
     }, []);
 
-
-    // BUSCAR OS DADOS DO USUÁRIO NO BACKEND PARA MOSTRAR NA TELA
-
-    const endereços = [{
-        destinatario: "Destinatário",
-        rua: "Rua X",
-        bairro: "Bairro Y",
-        cep: "CEP",
-        id: 0
-    },
-    {
-        destinatario: "Destinatário2",
-        rua: "Rua X",
-        bairro: "Bairro Y",
-        cep: "CEP",
-        id: 1
-    }]
-
-
-    // Fazer nessa página a importação dos dados do backend
+    useEffect(() => {
+        const promise = axios.get(servidorAddress,config);
+        promise.then((response) => {
+            const { data } = response;
+            setAddresses(data);
+            // TIRAR DEPOIS ESSE CONSOLE
+            // console.log("Deu bom a requisição dos endereços")
+            // console.log(data);
+        })
+        promise.catch(() => console.log("deu ruim baixar as informações dos endereços"));
+    }, []);
 
     return (
         <>
@@ -64,8 +64,8 @@ function DadosComprador() {
             <h2>email</h2>
             <p>{user.email}</p>
             <h1>Endereço de entrega</h1>
-            {endereços.map(endereço => {
-                const { destinatario, rua, bairro, cep, id } = endereço
+            {addresses.map(address => {
+                const { destinatario, rua, bairro, cep } = address
                 return (
                     <>
                         <Container>

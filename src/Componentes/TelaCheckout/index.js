@@ -6,6 +6,10 @@ import DadosComprador from "./DadosComprador";
 
 function TelaCheckout() {
 
+    const idLS = localStorage.getItem("id");
+
+    console.log("id do cliente: ",idLS);
+
     const [destinatario, setDestinatario] = useState("");
     const [rua, setRua] = useState("");
     const [bairro, setBairro] = useState("");
@@ -41,7 +45,8 @@ function TelaCheckout() {
             destinatario,
             rua,
             bairro,
-            cep
+            cep,
+            id: idLS
         });
         promise.then(response => {
             const { data } = response;
@@ -83,7 +88,7 @@ function TelaCheckout() {
                         <Send type="submit">Salvar endereço</Send>
                     </SubContainer>
                     </form> :
-                    "não mostrar"}
+                    <></>}
 
                 <h1>Adicionar forma de pagamento</h1>
                 <PaymentSection>
