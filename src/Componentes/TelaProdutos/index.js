@@ -77,9 +77,10 @@ function TelaProdutos() {
 
 const Container = styled.div`
     margin-top: 67px;
+    width: 100%;
 `
 const Section = styled.div`
-    width: 374px;
+    width: 100%;
     height: 110px;
     display: flex;
     justify-content: center;
@@ -92,7 +93,7 @@ const Section = styled.div`
         }
 `
 const Books = styled.div`
-    width: 374px;
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
