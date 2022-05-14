@@ -36,6 +36,7 @@ function TelaLogin() {
       //
       setCliente({name, token, clienteId});
       setTimeout(() => setLoading(false), 3000);
+      localStorage.setItem("nome", name);
       localStorage.setItem("token", token);
       localStorage.setItem("id", clienteId);
 

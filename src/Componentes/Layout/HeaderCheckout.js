@@ -1,18 +1,28 @@
+import { useState, useContext} from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import UsuarioContext from "./../Contextos/UsuarioContext"
 import styled from "styled-components";
 import img from "./../../imagens/livrariat5logo.png"
 
-function HeaderCheckout
-    () {
+function HeaderCheckout () {
+
+    // const {cliente} = useContext(UsuarioContext);
+
+    // const {name} = cliente;
+
+    const nomeLS = localStorage.getItem("nome");
 
     const navigate = useNavigate();
 
     const [visivel, setVisivel] = useState(false);
 
     function encerrarSessao () {
-        // Apagar token
-        // voltar para a página de compras
+        const mensagem = "Deseja fazer o logout?";
+        const resultado = window.confirm(mensagem)
+        if (resultado) {
+        navigate("/")
+        localStorage.clear();
+        }
     }
 
     return (
@@ -20,8 +30,8 @@ function HeaderCheckout
             <Head>
                 <Container>
                     <Logo src={img} />
-                    <User>Olá, usuário</User>
-                    <IconLogout onClick={() => navigate("/carrinho")}>
+                    <User>Olá, {nomeLS}</User>
+                    <IconLogout>
                         <ion-icon onClick={() => encerrarSessao()} name="log-out"></ion-icon>
                     </IconLogout>
                 </Container>
@@ -29,7 +39,6 @@ function HeaderCheckout
         </>
     )
 }
-
 
 const Head = styled.div`
     position: fixed;

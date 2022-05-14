@@ -1,12 +1,9 @@
 import { useState, useEffect, useContext} from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UsuarioContext from "./../Contextos/UsuarioContext"
 import styled from "styled-components"
 
 function DadosComprador() {
-
-    const navigate = useNavigate();
 
     // const {cliente} = useContext(UsuarioContext);
 
@@ -16,7 +13,7 @@ function DadosComprador() {
 
     const idLS = localStorage.getItem("id");
 
-    console.log("id do cliente: ",idLS);
+    // console.log("id do cliente: ",idLS);
 
     // console.log("token: ",tokenLS);
 
@@ -34,7 +31,6 @@ function DadosComprador() {
             "id": idLS
         }
     }
-
 
     useEffect(() => {
         const promise = axios.get(servidorCheckout,config);
@@ -54,8 +50,8 @@ function DadosComprador() {
             const { data } = response;
             setAddresses(data);
             // TIRAR DEPOIS ESSE CONSOLE
-            console.log("Deu bom a requisição dos endereços")
-            console.log(data);
+            // console.log("Deu bom a requisição dos endereços")
+            // console.log(data);
         })
         promise.catch(() => console.log("deu ruim baixar as informações dos endereços"));
     }, []);
@@ -68,11 +64,11 @@ function DadosComprador() {
         promise.then(response => {
             const {data} = response;
             console.log(data);
+            setTimeout(() => window.location.reload(),1000);
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
  
-
     return (
         <>
             <h1>Dados do comprador</h1>
