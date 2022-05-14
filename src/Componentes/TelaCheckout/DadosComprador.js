@@ -1,9 +1,12 @@
 import { useState, useEffect, useContext} from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UsuarioContext from "./../Contextos/UsuarioContext"
 import styled from "styled-components"
 
 function DadosComprador() {
+
+    const navigate = useNavigate();
 
     // const {cliente} = useContext(UsuarioContext);
 
@@ -32,6 +35,7 @@ function DadosComprador() {
         }
     }
 
+
     useEffect(() => {
         const promise = axios.get(servidorCheckout,config);
         promise.then((response) => {
@@ -50,11 +54,24 @@ function DadosComprador() {
             const { data } = response;
             setAddresses(data);
             // TIRAR DEPOIS ESSE CONSOLE
-            // console.log("Deu bom a requisição dos endereços")
-            // console.log(data);
+            console.log("Deu bom a requisição dos endereços")
+            console.log(data);
         })
         promise.catch(() => console.log("deu ruim baixar as informações dos endereços"));
     }, []);
+
+
+    function deletarEndereço (id) {
+        console.log("Entrei na função de deletar o endereço")
+        const servidorDeletar = `http://localhost:5000/address/${id}`;
+        const promise = axios.delete(servidorDeletar)
+        promise.then(response => {
+            const {data} = response;
+            console.log(data);
+        })
+        promise.catch(() => console.log("deu ruim em deletar o endereço"));
+    }
+ 
 
     return (
         <>
@@ -65,12 +82,12 @@ function DadosComprador() {
             <p>{user.email}</p>
             <h1>Endereço de entrega</h1>
             {addresses.map(address => {
-                const { destinatario, rua, bairro, cep } = address
+                const { destinatario, rua, bairro, cep, _id } = address
                 return (
                     <>
                         <Container>
                             <h5>{destinatario}</h5>
-                            <IconDelete>
+                            <IconDelete onClick={() => deletarEndereço(_id)}>
                                 <ion-icon name="close-circle"></ion-icon>
                             </IconDelete>
                             <p>{rua}</p>
