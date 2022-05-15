@@ -34,13 +34,14 @@ function HeaderProdutos() {
 }
 
 const Sidebar = styled.div`
-    width: 250px;
+    width: 60%;
     height: 75%;
     background-color: blue;
     position: fixed;
     z-index: 5;
     top: 0;
     left: 0;
+    border-bottom-right-radius: 5px;
 `
 const Login = styled.button`
     width: 125px;
@@ -61,10 +62,12 @@ const Head = styled.div`
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    margin-bottom: 67px;
 `
 const Container = styled.div`
-    background-color: lightgreen;
-    width: 375px;
+    background-color: #FF8C00;
+    width: 100%;
     height: 67px;
     display: flex;
     justify-content: center;
@@ -73,23 +76,29 @@ const Container = styled.div`
 `
 
 const Logo = styled.img`
-    width: 25%;
+    height: 67px;
     border-radius: 5px;
 `
 
 const IconCart = styled.button`
     font-size: 25px;
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: #FF8C00;
     position: absolute;
     right: 0;
+    border: none;
+    border-radius: 5px;
+    margin-right: 8px;
 `
 
 const IconBars = styled.button`
     font-size: 25px;
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: #FF8C00;
     position: absolute;
     left: 0;
+    border: none;
+    border-radius: 5px;
+    margin-left: 8px;
 `
 export default HeaderProdutos;
