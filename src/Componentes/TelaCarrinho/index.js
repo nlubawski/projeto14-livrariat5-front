@@ -53,22 +53,33 @@ function TelaCarrinho() {
         }
     }
 
+    function deletarLivro(id) {
+        console.log("to aqui")
+    }
+
     return (
         <>
             <HeaderProdutos />
             <Container>
                 <Titulo>Seus Produtos!</Titulo>
                 {carrinho.map(livro => {
-                    const { title, price, author, id } = livro;
+                    const { title, price, author, _id } = livro;
                     return (
-                        <div key={id}>
+                        <div key={_id}>
                             <Books>
-                                <p>{title}</p>
+                                <Autor>
+                                <h1>{title}</h1>
+                                <h2>{author}</h2>
+                                </Autor>
+                                <Box>
                                 <h1>{price}</h1>
+                                <IconDelete onClick={() => deletarLivro(_id)}>
+                                    <ion-icon name="close-circle" ></ion-icon>
+                                </IconDelete>
+                                </Box>
                             </Books>
-                            <Autor>
-                                <p>{author}</p>
-                            </Autor>
+                            
+                            
                         </div>
                     )
                 })
@@ -127,10 +138,6 @@ const Books = styled.div`
     justify-content: space-between;
     gap: 10px;
     font-family: 'Roboto', sans-serif;
-
-    h1{
-        font-weight:bold;
-    }
 `
 const Autor = styled.div`
     width: 85vw;
@@ -140,6 +147,18 @@ const Autor = styled.div`
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
     font-size: 14px;
+    flex-direction: column;
+
+    h1{
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+    }
+    h2{
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
+        font-size: 14px;
+    }
 `
 
 const Finalizar = styled.button`
@@ -177,5 +196,24 @@ const EscolherMais = styled.button`
 const NavLink = styled(Link)`
   text-decoration: none;
 `;
+
+const IconDelete = styled.button`
+    font-size: 22px;
+    background-color: none;
+    border: 0;
+    color: #ff1100;
+    z-index: -1;
+    background-color: white;
+    `
+
+const Box = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40px;
+    h1{
+        font-weight:bold;
+    }
+`
 
 export default TelaCarrinho
