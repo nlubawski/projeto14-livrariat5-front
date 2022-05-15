@@ -1,6 +1,5 @@
-import { useState, useContext} from "react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UsuarioContext from "./../Contextos/UsuarioContext"
 import styled from "styled-components";
 import img from "./../../imagens/livrariat5logo.png"
 
@@ -14,7 +13,7 @@ function HeaderCheckout () {
 
     const navigate = useNavigate();
 
-    const [visivel, setVisivel] = useState(false);
+    // const [visivel, setVisivel] = useState(false);
 
     function encerrarSessao () {
         const mensagem = "Deseja fazer o logout?";

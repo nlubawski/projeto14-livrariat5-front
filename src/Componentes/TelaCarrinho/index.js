@@ -5,18 +5,32 @@ import { useNavigate, Link } from "react-router-dom";
 import HeaderProdutos from "../Layout/HeaderProdutos";
 import UsuarioContext from "./../Contextos/UsuarioContext"
 
-
 function TelaCarrinho() {
 
+    const idLS = localStorage.getItem("id");
+
+    const nomeLS = localStorage.getItem("nome");
+
+    const tokenLS = localStorage.getItem("token");
+
     const [carrinho, setCarrinho] = useState([]);
-    const servidor = "http://localhost:5000/carrinho";
+    const servidor = `http://localhost:5000/carrinho`;
     const { cliente } = useContext(UsuarioContext);
     const navigate = useNavigate();
+    console.log(cliente);
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${tokenLS}`,
+            "id": idLS
+        }
+    }
 
     useEffect(() => {
-        const promise = axios.get(servidor);
+        const promise = axios.get(servidor, config);
         promise.then((response) => {
             const { data } = response;
+            console.log(data);
             setCarrinho(data);
         })
         promise.catch(() => console.log("deu ruim :/"));
@@ -26,60 +40,71 @@ function TelaCarrinho() {
     function calcularTotal() {
         carrinho.forEach(livro => total += parseFloat(livro.price))
         total = total.toFixed(2);
-        total = total.replace(".",", ");
+        total = total.replace(".", ", ");
         return total;
     }
 
     async function finalizar() {
-        console.log("tokenzinho", cliente)
-        if (cliente === null) {
-            return alert('faca login ou cadastre-se')
-            
-        }
-        const body = {
-            name: cliente.name,
-            id: cliente.id
-        };
-        const headers = {
-            headers: { "Authorization": `Bearer ${cliente.token}` }
-        }
-        try {
-            await axios.post("http://localhost:5000/finalizar", body, headers);
-            alert("Registro feito com sucesso!");
-            navigate("/checkout");
-        } catch (error) {
-            console.log("Erro ao tentar finalizar");
-            console.log(error);
+      if (carrinho.length === 0) {
+          alert ("Escolha algum produto antes de prosseguir");
+          navigate ("/")
+      }
+        else {
+            navigate("/checkout")
+            // VERIFICAR COM NATHAN ESSA REQUISIÇÃO
+            // const body = {
+            //     name: nomeLS,
+            //     id: idLS
+            // };
+            // const headers = {
+            //     headers: { "Authorization": `Bearer ${tokenLS}` }
+            // }
+            // try {
+            //     await axios.post("http://localhost:5000/finalizar", body, headers);
+            //     alert("Registro feito com sucesso!");
+            //     navigate("/checkout");
+            // } catch (error) {
+            //     console.log("Erro ao tentar finalizar");
+            //     console.log(error);
+            // }
         }
     }
 
     function deletarLivro(id) {
-        console.log("to aqui")
+        console.log("Entrei na função de deletar")
+        const servidorDelete = `http://localhost:5000/carrinho/${id}`
+        const promise = axios.delete(servidorDelete)
+        promise.then(response => {
+            const { data } = response;
+            console.log(data);
+            setTimeout(() => window.location.reload(), 100);
+        })
+        promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
 
     return (
         <>
             <HeaderProdutos />
             <Container>
-                <Titulo>Seus Produtos!</Titulo>
+                <Titulo>Seus Produtos! </Titulo>
                 {carrinho.map(livro => {
                     const { title, price, author, _id } = livro;
                     return (
                         <div key={_id}>
                             <Books>
                                 <Autor>
-                                <h1>{title}</h1>
-                                <h2>{author}</h2>
+                                    <h1>{title}</h1>
+                                    <h2>{author}</h2>
                                 </Autor>
                                 <Box>
-                                <h1>{price}</h1>
-                                <IconDelete onClick={() => deletarLivro(_id)}>
-                                    <ion-icon name="close-circle" ></ion-icon>
-                                </IconDelete>
+                                    <h1>{price}</h1>
+                                    <IconDelete onClick={() => deletarLivro(_id)}>
+                                        <ion-icon name="close-circle" ></ion-icon>
+                                    </IconDelete>
                                 </Box>
                             </Books>
-                            
-                            
+
+
                         </div>
                     )
                 })
@@ -202,7 +227,6 @@ const IconDelete = styled.button`
     background-color: none;
     border: 0;
     color: #ff1100;
-    z-index: -1;
     background-color: white;
     `
 

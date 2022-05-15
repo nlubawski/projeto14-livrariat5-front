@@ -1,12 +1,15 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import HeaderCheckout from "./../Layout/HeaderCheckout"
+import HeaderCheckout from "./../Layout/HeaderCheckout";
 import DadosComprador from "./DadosComprador";
+import RenderizarEndereços from "./RenderizarEndereços";
 
 function TelaCheckout() {
 
     const idLS = localStorage.getItem("id");
+
+    const tokenLS = localStorage.getItem("token");
 
     // console.log("id do cliente: ", idLS);
 
@@ -68,28 +71,36 @@ function TelaCheckout() {
     pois o banco de dados do carrinho não contém ainda o id do usuário, sem isso
     ele vai puxar todos os livros. Por enquanto está pegando da lista de livros*/
 
-    // DEPOIS COLOCAR ESSA URL DENTRO DO USEEFFECT E FAZER A ROTA DINÂMICA
-    const URLCarrinhos = "http://localhost:5000/carrinho"
+    const servidor = `http://localhost:5000/carrinho`;
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${tokenLS}`,
+            "id": idLS
+        }
+    }
 
     useEffect(() => {
-        // Ver depois se precisa validar o token nessa parte
-        const promise = axios.get(URLCarrinhos);
-        promise.then(response => {
+        const promise = axios.get(servidor, config);
+        promise.then((response) => {
             const { data } = response;
+            console.log(data);
             setLivros(data);
-            // TIRAR DEPOIS ESSE CONSOLE
-            // console.log("Deu bom a requisição dos livros")
-            // console.log(data);
         })
-        promise.catch(() => console.log("deu ruim baixar as informações dos endereços"));
+        promise.catch(() => console.log("deu ruim baixar os livros do carrinho"));
     }, []);
 
-    /* Quando os livros renderizados forem do carrinho, ai sim eu coloco pra deletar
-    um livro do carrinho, por enquanto não quero apagar o livro do banco de dados de livros, 
-    mas o backend já ta configurado pra fazer esse delete*/
 
-    function deletarLivro (id) {
-        console.log("Cliquei em deletar o livro");
+    function deletarLivro(id) {
+        console.log("Entrei na função de deletar")
+        const servidorDelete = `http://localhost:5000/carrinho/${id}`
+        const promise = axios.delete(servidorDelete)
+        promise.then(response => {
+            const {data} = response;
+            console.log(data);
+            setTimeout(() => window.location.reload(),100);
+        })
+        promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
 
     return (
@@ -97,6 +108,8 @@ function TelaCheckout() {
             <HeaderCheckout />
             <Container>
                 <DadosComprador />
+                <h1>Endereço de entrega</h1>
+                <RenderizarEndereços />
                 <Address>
                     <h1>Adicionar endereço de entrega</h1>
                     <IconAdd onClick={() => setVisivel(!visivel)}>
@@ -133,7 +146,7 @@ function TelaCheckout() {
                         const { title, author, image, price, _id } = livro;
                         let preço = price.replace(".", ",");
                         return (
-                            <Border>
+                            <Border key={_id}>
                                 <Image src={image}></Image>
                                 <Description>
                                     <h4>{title}</h4>
