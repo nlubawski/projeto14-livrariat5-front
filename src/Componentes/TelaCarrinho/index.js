@@ -25,12 +25,16 @@ function TelaCarrinho() {
     let total = 0;
     function calcularTotal() {
         carrinho.forEach(livro => total += parseFloat(livro.price))
+        total = total.toFixed(2);
+        total = total.replace(".",", ");
         return total;
     }
 
     async function finalizar() {
-        if (!cliente.token) {
-            alert('faca login ou cadastre-se')
+        console.log("tokenzinho", cliente)
+        if (cliente === null) {
+            return alert('faca login ou cadastre-se')
+            
         }
         const body = {
             name: cliente.name,
@@ -53,24 +57,25 @@ function TelaCarrinho() {
         <>
             <HeaderProdutos />
             <Container>
+                <Titulo>Seus Produtos!</Titulo>
                 {carrinho.map(livro => {
                     const { title, price, author, id } = livro;
                     return (
                         <div key={id}>
                             <Books>
-                                {title}
-                                {price}
+                                <p>{title}</p>
+                                <h1>{price}</h1>
                             </Books>
-                            <Books>
-                                {author}
-                            </Books>
+                            <Autor>
+                                <p>{author}</p>
+                            </Autor>
                         </div>
                     )
                 })
                 }
 
                 <Total>
-                    Total: {calcularTotal()}
+                    <h2>Total: R$ <span>{calcularTotal()}</span></h2>
                 </Total>
                 <Finalizar onClick={() => finalizar()}>Finalizar Pedido</Finalizar>
                 <NavLink to="/">
@@ -83,32 +88,58 @@ function TelaCarrinho() {
 }
 
 const Container = styled.div`
+    width: 100%;
     margin-top: 67px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+`
+const Titulo = styled.div`
+    font-size: 24px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
 
 `
 const Total = styled.div`
-    width: 374px;
+    width: 100%;
     height: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Roboto', sans-serif;
+
 
         h2 {
+            font-family: 'Roboto', sans-serif;
             font-weight: 400;
-            font-size: 24px;
-            color: var(--cor-texto);
+            font-size: 20px;
         }
+
+        span{
+            font-weight: bold;
+        }
+
 `
 const Books = styled.div`
-    width: 374px;
+    width: 85vw;
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 10px;
+    font-family: 'Roboto', sans-serif;
+
+    h1{
+        font-weight:bold;
+    }
+`
+const Autor = styled.div`
+    width: 85vw;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
 `
 
 const Finalizar = styled.button`
@@ -117,7 +148,7 @@ const Finalizar = styled.button`
   background-color: #FF6C00;
   border: 1px solid #FF8C00;
   border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
   color: #fff;
@@ -133,7 +164,7 @@ const EscolherMais = styled.button`
   background-color: #FF6C00;
   border: 1px solid #FF8C00;
   border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 15px;
   color: #fff;
