@@ -2,8 +2,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import HeaderProdutos from "../Layout/HeaderProdutos";
 
 function TelaLivro() {
+
+    const idLS = localStorage.getItem("id");
+
+    const tokenLS = localStorage.getItem("token");
 
     const { livroId } = useParams();
 
@@ -33,22 +38,32 @@ function TelaLivro() {
     */
 
     function acionarCarrinho () {
-        navigate("/carrinho");
-        // const informações = {
-        //     id: livroId,
-        //     quantity: "1"
-        // }
-        const promise = axios.post(servidorCarrinho, livro);
-        promise.then(response => {
-            console.log(response);
-        })
-        promise.catch(() => console.log("deu salvar o livro no carrinho"));
-        //  ENVIAR AS INFORMAÇÕES DE COMPRA NO AXIOS POST (_id e a quantidade comprada)
+        if (tokenLS === null) {
+            alert ("Faça login para continuar com a operação");
+            // Será que precisa encaminhar pra essa página?
+            navigate("/login");
+        }
+        else {
+            navigate("/carrinho");
+            const body = {
+                title: livro.title,
+                author: livro.author,
+                price: livro.price,
+                image: livro.image,
+                id: idLS
+            }
+            const promise = axios.post(servidorCarrinho, body);
+            promise.then(response => {
+                console.log(response);
+            })
+            promise.catch(() => console.log("deu salvar o livro no carrinho"));
+        }
+        
     }
 
     return (
         <>
-            <p>Sou as informações de um livro</p>
+            <HeaderProdutos />
             <Container>
                 <Subcontainer>
                     <Image src={livro.image}></Image>
