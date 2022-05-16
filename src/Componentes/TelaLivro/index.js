@@ -64,11 +64,11 @@ function TelaLivro() {
 
                 </Subcontainer>
                 <Descricao>{livro.description}</Descricao>
-            </Container>
-            <Footer>
+                <Footer>
                 <Preco>R${preço}</Preco>
                 <Add onClick={() => acionarCarrinho()}>Comprar</Add>
-            </Footer>
+                </Footer>
+            </Container>
         </>
     )
 }
@@ -129,6 +129,7 @@ const Footer = styled.div`
     margin: 0 25px;
     margin-top: 27px;
     max-width: 636px;
+    width: 100%;
 `
 const Preco = styled.div`
     font-family: 'Roboto', sans-serif;
