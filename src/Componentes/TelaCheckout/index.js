@@ -11,6 +11,29 @@ function TelaCheckout() {
 
     const tokenLS = localStorage.getItem("token");
 
+    const [user, setUser] = useState([]);
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${tokenLS}`,
+            "id": idLS
+        }
+    }
+
+    const servidorCheckout = "http://localhost:5000/checkout";
+
+    useEffect(() => {
+        const promise = axios.get(servidorCheckout, config);
+        promise.then((response) => {
+            const { data } = response;
+            setUser(data);
+            // TIRAR DEPOIS ESSE CONSOLE
+            console.log("Deu bom a requisição")
+            console.log(data);
+        })
+        promise.catch(() => console.log("deu ruim baixar as informações do usuário"));
+    }, []);
+
     // console.log("id do cliente: ", idLS);
 
     // Mapa criado pra selecionar apenas um endereço
@@ -18,12 +41,10 @@ function TelaCheckout() {
 
     const [pagamentoSelecionado, setPagamentoSelecionado] = useState(new Map());
 
-
     /* Na hora de enviar para o servidor fazer o seguinte:
      endereço: [...endereçoSelecionado.keys()]
      Ele vai mandar apenas o id do endereço selecionado, dai usar o filtro
      no backend para devolver num get apenas esse endereço do banco*/
-
 
     // Estados usados nos inputs
     const [destinatario, setDestinatario] = useState("");
@@ -43,19 +64,8 @@ function TelaCheckout() {
     const formasPagamento = [
         { opção: "Cartão de crédito", icone: "card-outline", id: "1" },
         { opção: "Boleto", icone: "barcode-outline", id: "2" },
-        { opção: "Pix", icone: "cash-outline", id: "3" }
+        { opção: "Cash", icone: "cash-outline", id: "3" }
     ]
-
-    // Funções pra ativar a mudança de cor da borda 
-    function ativarCartao() {
-        setCartao(true);
-        setBoleto(false);
-    }
-
-    function ativarBoleto() {
-        setCartao(false);
-        setBoleto(true);
-    }
 
     function zerarinputs() {
         setDestinatario("");
@@ -99,18 +109,7 @@ function TelaCheckout() {
         })
     }
 
-    /* Requisição pra obter os livros do carrinho, mas precisa de alterações, 
-    pois o banco de dados do carrinho não contém ainda o id do usuário, sem isso
-    ele vai puxar todos os livros. Por enquanto está pegando da lista de livros*/
-
     const servidor = `http://localhost:5000/carrinho`;
-
-    const config = {
-        headers: {
-            "Authorization": `Bearer ${tokenLS}`,
-            "id": idLS
-        }
-    }
 
     useEffect(() => {
         const promise = axios.get(servidor, config);
@@ -135,14 +134,35 @@ function TelaCheckout() {
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
 
+    function finalizarCompra () {
+        const URL_Confirmacao = `http://localhost:5000/finalizar`
+        const body = {
+            nome: user.name,
+            email: user.email,
+            address: [...endereçoSelecionado.keys()][0],
+            payment: [...pagamentoSelecionado.keys()][0],
+            id: idLS,
+        }
+        console.log(body.nome);
+
+        const promise = axios.post(URL_Confirmacao, body);
+        promise.then(response => {
+            const { data } = response;
+            console.log(data);
+        })
+        promise.catch(() => console.log("deu ruim em finalizar a compra"));
+    }
+    
     return (
         <>
             <HeaderCheckout />
             <Container>
-                <DadosComprador />
+                <DadosComprador usuario={user}/>
+
                 <h1>Endereço de entrega</h1>
                 <RenderizarEndereços endereçoSelecionado={endereçoSelecionado}
                     setEndereçoSelecionado={setEndereçoSelecionado} />
+
                 <Address>
                     <h1>Adicionar endereço de entrega</h1>
                     <IconAdd onClick={() => setVisivel(!visivel)}>
@@ -192,7 +212,6 @@ function TelaCheckout() {
                             </Border>
                         )
                     })}
-
                 </SubContainer>
 
                 <h1>Adicionar forma de pagamento</h1>
@@ -209,9 +228,8 @@ function TelaCheckout() {
                             </Payment>
                         )
                     })}
-
                 </PaymentSection>
-                <Finish>Finalizar compra</Finish>
+                <Finish onClick={() => finalizarCompra()}>Finalizar compra</Finish>
             </Container>
         </>
     )
@@ -237,7 +255,6 @@ const Border = styled.div`
         padding-top: 10px;
     }
 `
-
 const Description = styled.div`
     width: 100px;
     margin-right: 25px;
