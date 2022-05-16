@@ -3,7 +3,9 @@ import axios from "axios";
 import UsuarioContext from "../Contextos/UsuarioContext"
 import styled from "styled-components"
 
-function RenderizarEndereços() {
+function RenderizarEndereços(props) {
+
+    const {endereçoSelecionado, setEndereçoSelecionado} = props;
 
     // const {cliente} = useContext(UsuarioContext);
 
@@ -17,9 +19,7 @@ function RenderizarEndereços() {
 
     // console.log("token: ",tokenLS);
 
-
     const [addresses, setAddresses] = useState([]);
-
 
     const servidorAddress = "http://localhost:5000/address";
 
@@ -29,8 +29,6 @@ function RenderizarEndereços() {
             "id": idLS
         }
     }
-
-
 
     useEffect(() => {
         const promise = axios.get(servidorAddress,config);
@@ -57,14 +55,36 @@ function RenderizarEndereços() {
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
  
-    return (
+    // ATÉ AGORA, CADA CLIQUE QUE EU DOU, SE NÃO TEM O ID ELE COLOCA, E SE TEM, ELE TIRA. 
+    // PRECISO FAZER COM QUE QUANDO COLOCA O ID EM UM ITEM, RETIRA O ID DOS OUTROS.
+    function ativarEndereço (id) {
+        console.log("Clicado com sucesso");
+        const jaSelecionado = endereçoSelecionado.has(id); // Pergunta pro meu estado se ele já tem esse id, retorna true ou false
+        if (jaSelecionado) { // Se eu já tinha selecionado e clicar de novo
+            endereçoSelecionado.delete(id); // eu preciso tirar o id do mapa
+            setEndereçoSelecionado(new Map(endereçoSelecionado)); // atualizo o mapa sem o id que acabei de clicar
+            console.log("Nada acontece")
+        }
+        else { // Se eu estou clicando pela primeira vez
+            endereçoSelecionado.clear();
+            setEndereçoSelecionado(new Map(endereçoSelecionado.set(id)));
+            // atualizo o mapa colocando as informações do id nele
+        }
+    }
+
+     return (
         <>
            
             {addresses.map(address => {
-                const { destinatario, rua, bairro, cep, _id } = address
+                const { destinatario, rua, bairro, cep, _id } = address;
+                const checkSelecionado = endereçoSelecionado.has(_id)
+                // Meus endereços selecionados tem esse id? Lembrando que o id é iterado
+                // Cada vez que clico em um dia, o estado é alterado, então o componente é novamente renderizado.
+                // Ao clicar, eu atualizo meu mapa, então esse if vai achar o id no mapa
+                // Ao achar o id no mapa, vai alterar a prop abaixo de selecionado para true
                 return (
                     <>
-                        <Container key={_id}>
+                        <Container selecionado={checkSelecionado} key={_id} onClick={() => ativarEndereço(_id)}>
                             <h5>{destinatario}</h5>
                             <IconDelete onClick={() => deletarEndereço(_id)}>
                                 <ion-icon name="close-circle"></ion-icon>
@@ -78,6 +98,11 @@ function RenderizarEndereços() {
             })}
         </>
     )
+}
+
+function corBorda(selecionado) {
+    if (selecionado) return "3px solid red";
+    else return "none";
 }
 
 const IconDelete = styled.button`
@@ -95,6 +120,7 @@ const Container = styled.div`
     width: 350px;
     min-height: 120px;
     box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
+    border: ${(props) => corBorda(props.selecionado)};
     border-radius: 3px;
     display: flex;
     flex-direction: column;

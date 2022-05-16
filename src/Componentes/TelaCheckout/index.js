@@ -13,6 +13,18 @@ function TelaCheckout() {
 
     // console.log("id do cliente: ", idLS);
 
+    // Mapa criado pra selecionar apenas um endereço
+    const [endereçoSelecionado, setEndereçoSelecionado] = useState(new Map());
+
+    const [pagamentoSelecionado, setPagamentoSelecionado] = useState(new Map());
+
+
+    /* Na hora de enviar para o servidor fazer o seguinte:
+     endereço: [...endereçoSelecionado.keys()]
+     Ele vai mandar apenas o id do endereço selecionado, dai usar o filtro
+     no backend para devolver num get apenas esse endereço do banco*/
+
+
     // Estados usados nos inputs
     const [destinatario, setDestinatario] = useState("");
     const [rua, setRua] = useState("");
@@ -27,6 +39,12 @@ function TelaCheckout() {
     // Estados usados pra trocar a cor da borda ao selecionar a opção de pagamento
     const [cartao, setCartao] = useState(false);
     const [boleto, setBoleto] = useState(false);
+
+    const formasPagamento = [
+        { opção: "Cartão de crédito", icone: "card-outline", id: "1" },
+        { opção: "Boleto", icone: "barcode-outline", id: "2" },
+        { opção: "Pix", icone: "cash-outline", id: "3" }
+    ]
 
     // Funções pra ativar a mudança de cor da borda 
     function ativarCartao() {
@@ -45,6 +63,20 @@ function TelaCheckout() {
         setBairro("");
         setCep("");
         setVisivel(false);
+    }
+
+    function ativarPagamento(id) {
+        console.log("Clicado com sucesso");
+        const jaSelecionado = pagamentoSelecionado.has(id);
+        if (jaSelecionado) {
+            pagamentoSelecionado.delete(id);
+            setPagamentoSelecionado(new Map(pagamentoSelecionado));
+            console.log("Nada acontece")
+        }
+        else {
+            pagamentoSelecionado.clear();
+            setPagamentoSelecionado(new Map(pagamentoSelecionado.set(id)));
+        }
     }
 
     // Requisição pra salvar o endereço no banco de dados
@@ -96,9 +128,9 @@ function TelaCheckout() {
         const servidorDelete = `http://localhost:5000/carrinho/${id}`
         const promise = axios.delete(servidorDelete)
         promise.then(response => {
-            const {data} = response;
+            const { data } = response;
             console.log(data);
-            setTimeout(() => window.location.reload(),100);
+            setTimeout(() => window.location.reload(), 100);
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
@@ -109,7 +141,8 @@ function TelaCheckout() {
             <Container>
                 <DadosComprador />
                 <h1>Endereço de entrega</h1>
-                <RenderizarEndereços />
+                <RenderizarEndereços endereçoSelecionado={endereçoSelecionado}
+                    setEndereçoSelecionado={setEndereçoSelecionado} />
                 <Address>
                     <h1>Adicionar endereço de entrega</h1>
                     <IconAdd onClick={() => setVisivel(!visivel)}>
@@ -156,7 +189,6 @@ function TelaCheckout() {
                                 <IconDelete onClick={() => deletarLivro(_id)}>
                                     <ion-icon name="close-circle"></ion-icon>
                                 </IconDelete>
-
                             </Border>
                         )
                     })}
@@ -165,18 +197,19 @@ function TelaCheckout() {
 
                 <h1>Adicionar forma de pagamento</h1>
                 <PaymentSection>
-                    <CreditCard cartao={cartao} onClick={() => ativarCartao()}>
-                        <IconPay>
-                            <ion-icon name="card-outline"></ion-icon>
-                        </IconPay>
-                        <p>Cartão de crédito</p>
-                    </CreditCard>
-                    <BarCode boleto={boleto} onClick={() => ativarBoleto()}>
-                        <IconPay>
-                            <ion-icon name="barcode-outline"></ion-icon>
-                        </IconPay>
-                        <p>Boleto</p>
-                    </BarCode>
+                    {formasPagamento.map(pagamento => {
+                        const { opção, icone, id } = pagamento
+                        const checkSelecionado = pagamentoSelecionado.has(id)
+                        return (
+                            <Payment selecionado={checkSelecionado} onClick={() => ativarPagamento(id)}>
+                                <IconPay>
+                                    <ion-icon name={icone}></ion-icon>
+                                </IconPay>
+                                <p>{opção}</p>
+                            </Payment>
+                        )
+                    })}
+
                 </PaymentSection>
                 <Finish>Finalizar compra</Finish>
             </Container>
@@ -184,14 +217,9 @@ function TelaCheckout() {
     )
 }
 
-function bordaCartao(selecionado) {
-    if (selecionado) return "5px solid red"
-    else return "0"
-}
-
-function bordaBoleto(selecionado) {
-    if (selecionado) return "5px solid red"
-    else return "0"
+function corBorda(selecionado) {
+    if (selecionado) return "3px solid red";
+    else return "none";
 }
 
 const Border = styled.div`
@@ -256,7 +284,7 @@ const PaymentSection = styled.div`
     display: flex;
     gap: 20px;
 `
-const CreditCard = styled.div`
+const Payment = styled.div`
     width: 150px;
     height: 75px;
     display: flex;
@@ -264,18 +292,7 @@ const CreditCard = styled.div`
     align-items: center;
     gap: 10px;
     background-color: lightblue;
-    border: ${(props) => bordaCartao(props.cartao)}
-`
-
-const BarCode = styled.div`
-    width: 150px;
-    height: 75px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    background-color: lightblue;
-    border: ${(props) => bordaBoleto(props.boleto)}
+    border: ${(props) => corBorda(props.selecionado)};
 `
 const IconPay = styled.button`
     font-size: 25px;
