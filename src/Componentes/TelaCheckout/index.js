@@ -6,9 +6,7 @@ import DadosComprador from "./DadosComprador";
 import RenderizarEndereços from "./RenderizarEndereços";
 
 function TelaCheckout() {
-
     const idLS = localStorage.getItem("id");
-
     const tokenLS = localStorage.getItem("token");
 
     const [user, setUser] = useState([]);
@@ -51,13 +49,8 @@ function TelaCheckout() {
     const [rua, setRua] = useState("");
     const [bairro, setBairro] = useState("");
     const [cep, setCep] = useState("");
-
-    // Estado usado pra armazenar os livros obtidos do carrinho
     const [livros, setLivros] = useState([]);
-
     const [visivel, setVisivel] = useState(false);
-
-    // Estados usados pra trocar a cor da borda ao selecionar a opção de pagamento
     const [cartao, setCartao] = useState(false);
     const [boleto, setBoleto] = useState(false);
 
@@ -102,8 +95,6 @@ function TelaCheckout() {
             id: idLS
         });
         promise.then(response => {
-            const { data } = response;
-            // console.log(response);
             zerarinputs();
             setTimeout(() => window.location.reload(), 1000);
         })
@@ -120,7 +111,6 @@ function TelaCheckout() {
         })
         promise.catch(() => console.log("deu ruim baixar os livros do carrinho"));
     }, []);
-
 
     function deletarLivro(id) {
         console.log("Entrei na função de deletar")
@@ -213,7 +203,6 @@ function TelaCheckout() {
                         )
                     })}
                 </SubContainer>
-
                 <h1>Adicionar forma de pagamento</h1>
                 <PaymentSection>
                     {formasPagamento.map(pagamento => {
@@ -248,51 +237,52 @@ const Border = styled.div`
     display: flex;
     padding: 10px;
     position: relative;
-
     h3 {
         font-size: 15px;
         font-weight: bold;
         padding-top: 10px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
     }
 `
 const Description = styled.div`
     width: 100px;
     margin-right: 25px;
     background-color: red;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 
     h4 {
         font-size: 12px;
         margin-left: 10px;
         margin-bottom: 10px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
     }
 `
-
 const Image = styled.img`
     width: 60px;
     height: 90px;
 `
-
 const IconDelete = styled.button`
     font-size: 25px;
-    background-color: lightgreen;
+    background-color:  #fff;
     border: 0;
-    color: gray;
+    color: red;
     position: absolute;
     top: 10px;
     right: 5px;
 `
-
 const Address = styled.div`
     width: 350px;
     display: flex;
     position: relative;
 `
-
 const IconAdd = styled.button`
     font-size: 25px;
-    background-color: yellow;
+    background-color: #fff;
     border: 0;
-    color: gray;
+    color:  #F5980B;
     position: absolute;
     right: 0;
     top: 5px;
@@ -313,90 +303,96 @@ const Payment = styled.div`
 `
 const IconPay = styled.button`
     font-size: 25px;
-    background-color: lightgreen;
+    background-color:  #F5980B;
     border: 0;
     color: gray;
+    border-radius: 5px;
 `
-
 const SubContainer = styled.div`
     width: 350px;
     box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     padding: 15px 0;
     padding-left: 10px;
-    background-color: lightgreen;
+    background-color: #fff;
     margin-bottom: 11px;
     position: relative;
 `
-
 const Container = styled.div`
-    background-color: yellow;
-    width: 375px;
+    background-color:  #fff;
+    width: 100vw;
     padding-left: 5px;
     padding-bottom: 25px;
-    margin-top: 75px;
+    margin-top: 67px;
     position: relative;
-
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     h1 {
         font-size: 20px;
         font-weight: bold;
         padding-top: 10px;
         margin-bottom: 20px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
     }
-
     h2 {
         font-size: 15px;
         font-weight: bold;
         margin-bottom: 3px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
     }
-
     h5 {
         font-size: 15px;
         font-weight: bold;
         margin: 15px 0;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
     }
-
     p {
         font-size: 15px;
         margin-bottom: 10px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
     }
 `
 const Input = styled.input`
-  height: 45px;
-  width: 303px;
-  border: 1px solid #d4d4d4;
-  border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  color: #666;
-  margin-top: 5px;
-  margin-bottom: 10px;  
-  &::placeholder {
-    font-family: "Lexend Deca", sans-serif;
+    height: 45px;
+    width: 303px;
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 15px;
-    color: #dbdbdb;
-    padding-left: 5px;
-  }
+    font-size: 20px;
+    color: #666;
+    margin-top: 5px;
+    margin-bottom: 10px;  
+    &::placeholder {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+        color: #dbdbdb;
+        padding-left: 5px;
+    }
 `
 const Send = styled.button`
     width: 120px;
     height: 50px;
     font-size: 12px;
     margin-top: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 `
-
 const Finish = styled.button`
     width: 350px;
     height: 50px;
     border-radius: 10px;
     font-size: 20px;
-    background-color: lightblue;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    background-color: #FF6C00;
+    border: solid 1px #FF6C00;
+    color: #fff;
     margin-top: 20px;
-
-    :hover {
-        background-color: green;
-    }
 `
 export default TelaCheckout;

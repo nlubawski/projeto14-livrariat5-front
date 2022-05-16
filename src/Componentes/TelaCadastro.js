@@ -28,7 +28,6 @@ function TelaCadastro() {
     });
 
     promise.then((response) => {
-      const { data } = { response };
       setTimeout(() => setLoading(false), 3000);
       navigate('/')
     });
@@ -82,7 +81,7 @@ function TelaCadastro() {
           <Botao type="submit">{loading ? <ThreeDots color="#fff" /> : 'Entrar'}
           </Botao>
           <Texto>
-            <Link to="/login">Já tem uma conta? Entre agora!</Link>
+            <NavLink to="/login">Já tem uma conta? Entre agora!</NavLink>
           </Texto>
         </Formulario>
       </Container>
@@ -98,7 +97,6 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #F5980B;
 `;
-
 const Formulario = styled.form`
   display: flex;
   flex-direction: column;
@@ -110,14 +108,14 @@ const Input = styled.input`
   width: 303px;
   border: 1px solid #d4d4d4;
   border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
   color: #666;
   margin-bottom: 6px;
   &::placeholder {
-    font-family: "Lexend Deca", sans-serif;
-    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+  font-weight: 400;
     font-size: 20px;
     color: #dbdbdb;
   }
@@ -128,7 +126,7 @@ const Botao = styled.button`
   background-color: #FF6C00;
   border: 1px solid #FF8C00;
   border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
   color: #fff;
@@ -138,19 +136,20 @@ const Botao = styled.button`
   align-items: center;
 `;
 const Texto = styled.p`
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 14px;
   a{
     color: #fff;
   }
 `;
-
 const Logo = styled.img`
 width: 35%;
 border-radius: 5px;
 padding-bottom: 15px;
-
+`;
+const NavLink = styled(Link)`
+  text-decoration: none;
 `;
 
 export default TelaCadastro;

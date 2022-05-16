@@ -6,26 +6,18 @@ import HeaderProdutos from "../Layout/HeaderProdutos";
 import UsuarioContext from "./../Contextos/UsuarioContext"
 
 function TelaCarrinho() {
-
     const idLS = localStorage.getItem("id");
-
-    const nomeLS = localStorage.getItem("nome");
-
     const tokenLS = localStorage.getItem("token");
-
     const [carrinho, setCarrinho] = useState([]);
     const servidor = `http://localhost:5000/carrinho`;
     const { cliente } = useContext(UsuarioContext);
     const navigate = useNavigate();
-    console.log(cliente);
-
     const config = {
         headers: {
             "Authorization": `Bearer ${tokenLS}`,
             "id": idLS
         }
     }
-
     useEffect(() => {
         const promise = axios.get(servidor, config);
         promise.then((response) => {
@@ -35,7 +27,6 @@ function TelaCarrinho() {
         })
         promise.catch(() => console.log("deu ruim :/"));
     }, []);
-
     let total = 0;
     function calcularTotal() {
         carrinho.forEach(livro => total += parseFloat(livro.price))
@@ -43,12 +34,11 @@ function TelaCarrinho() {
         total = total.replace(".", ", ");
         return total;
     }
-
     async function finalizar() {
-      if (carrinho.length === 0) {
-          alert ("Escolha algum produto antes de prosseguir");
-          navigate ("/")
-      }
+        if (carrinho.length === 0) {
+            alert("Escolha algum produto antes de prosseguir");
+            navigate("/")
+        }
         else {
             navigate("/checkout")
             // VERIFICAR COM NATHAN ESSA REQUISIÇÃO
@@ -81,7 +71,6 @@ function TelaCarrinho() {
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
-
     return (
         <>
             <HeaderProdutos />
@@ -103,13 +92,10 @@ function TelaCarrinho() {
                                     </IconDelete>
                                 </Box>
                             </Books>
-
-
                         </div>
                     )
                 })
                 }
-
                 <Total>
                     <h2>Total: R$ <span>{calcularTotal()}</span></h2>
                 </Total>
@@ -117,7 +103,6 @@ function TelaCarrinho() {
                 <NavLink to="/">
                     <EscolherMais>Escolher mais livros</EscolherMais>
                 </NavLink>
-
             </Container>
         </>
     )
@@ -135,7 +120,6 @@ const Titulo = styled.div`
     font-size: 24px;
     margin-bottom: 12px;
     font-family: 'Roboto', sans-serif;
-
 `
 const Total = styled.div`
     width: 100%;
@@ -144,18 +128,14 @@ const Total = styled.div`
     justify-content: center;
     align-items: center;
     font-family: 'Roboto', sans-serif;
-
-
         h2 {
             font-family: 'Roboto', sans-serif;
             font-weight: 400;
             font-size: 20px;
         }
-
         span{
             font-weight: bold;
         }
-
 `
 const Books = styled.div`
     width: 85vw;
@@ -173,7 +153,6 @@ const Autor = styled.div`
     font-weight: 300;
     font-size: 14px;
     flex-direction: column;
-
     h1{
         font-family: 'Roboto', sans-serif;
         font-weight: 400;
@@ -185,43 +164,40 @@ const Autor = styled.div`
         font-size: 14px;
     }
 `
-
 const Finalizar = styled.button`
-  height: 45px;
-  width: 303px;
-  background-color: #FF6C00;
-  border: 1px solid #FF8C00;
-  border-radius: 5px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  color: #fff;
-  margin-bottom: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 45px;
+    width: 303px;
+    background-color: #FF6C00;
+    border: 1px solid #FF8C00;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const EscolherMais = styled.button`
-  height: 25px;
-  width: 203px;
-  background-color: #FF6C00;
-  border: 1px solid #FF8C00;
-  border-radius: 5px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 15px;
-  color: #fff;
-  margin-bottom: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 25px;
+    width: 203px;
+    background-color: #FF6C00;
+    border: 1px solid #FF8C00;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
-
 const NavLink = styled(Link)`
-  text-decoration: none;
+    text-decoration: none;
 `;
-
 const IconDelete = styled.button`
     font-size: 22px;
     background-color: none;
@@ -229,7 +205,6 @@ const IconDelete = styled.button`
     color: #ff1100;
     background-color: white;
     `
-
 const Box = styled.div`
     display: flex;
     justify-content: space-between;

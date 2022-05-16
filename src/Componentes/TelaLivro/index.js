@@ -5,60 +5,31 @@ import styled from "styled-components";
 import HeaderProdutos from "../Layout/HeaderProdutos";
 
 function TelaLivro() {
-
-    const idLS = localStorage.getItem("id");
-
-    const tokenLS = localStorage.getItem("token");
-
     const { livroId } = useParams();
-
     const [livro, setLivro] = useState([]);
-
     const [preço, setPreço] = useState();
-
     const navigate = useNavigate();
-
     const servidorCarrinho = "http://localhost:5000/carrinho"
 
     useEffect(() => {
         const promise = axios.get(`http://localhost:5000/products/${livroId}`);
         promise.then((response) => {
             const { data } = response;
-            setPreço(data.price.replace(".",","));
+            setPreço(data.price.replace(".", ","));
             setLivro(data);
-            console.log("Id do livro: ",livroId);
+            console.log("Id do livro: ", livroId);
 
         })
         promise.catch(() => console.log("deu ruim renderizar o livro selecionado"));
     }, []);
 
-    /* 
-    Criar um botão para enviar o produto ao database do carrinho
-    Talvez criar um contador para o usuario escolher quantos produtos quer comprar
-    */
-
-    function acionarCarrinho () {
-        if (tokenLS === null) {
-            alert ("Faça login para continuar com a operação");
-            // Será que precisa encaminhar pra essa página?
-            navigate("/login");
-        }
-        else {
-            navigate("/carrinho");
-            const body = {
-                title: livro.title,
-                author: livro.author,
-                price: livro.price,
-                image: livro.image,
-                id: idLS
-            }
-            const promise = axios.post(servidorCarrinho, body);
-            promise.then(response => {
-                console.log(response);
-            })
-            promise.catch(() => console.log("deu salvar o livro no carrinho"));
-        }
-        
+    function acionarCarrinho() {
+        navigate("/carrinho");
+        const promise = axios.post(servidorCarrinho, livro);
+        promise.then(response => {
+            console.log(response);
+        })
+        promise.catch(() => console.log("deu salvar o livro no carrinho"));
     }
 
     return (
@@ -71,28 +42,26 @@ function TelaLivro() {
                         <h1>{livro.title}</h1>
                         <h2>{livro.author}</h2>
                     </div>
-                </Subcontainer>
-                <p>{livro.description}</p>
-                <Footer>
-                    <h3>R${preço}</h3>
-                    <Add onClick={() => acionarCarrinho()}>Comprar</Add>
-                </Footer>
-            </Container>
 
+                </Subcontainer>
+                <Descricao>{livro.description}</Descricao>
+            </Container>
+            <Footer>
+                <Preco>R${preço}</Preco>
+                <Add onClick={() => acionarCarrinho()}>Comprar</Add>
+            </Footer>
         </>
     )
 }
 
 const Container = styled.div`
-    width: 374px;
-    margin-left: 25px;
+    width: 100%;
+    margin: 0 25px;
     margin-top: 67px;
-
-    p {
-        font-size: 12px;
-        text-align: left;    
-    }
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     h3 {
         font-size: 20px;
         font-weight: bold;
@@ -108,28 +77,52 @@ const Subcontainer = styled.div`
         font-size: 35px;
         font-weight: bold;
         margin: 10px 0;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        font-size: 20px;
     }
     
     h2 {
-        font-size: 15px;
-        color: blue;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 17px;
     }
 `
-
+const Descricao = styled.div`
+    font-size: 12px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 636px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+`
 const Image = styled.img`
     width: 129px;
     height: 193px;
 `
-
 const Footer = styled.div`
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
+    margin: 0 25px;
+    margin-top: 27px;
+    max-width: 636px;
 `
-
+const Preco = styled.div`
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+`
 const Add = styled.button`
     width: 75px;
     height: 45px;
     border-radius: 5px;
+    background-color: #FF6C00;
+    border: 1px solid #FF8C00;
+    color: #ffffff;
+
 `
 export default TelaLivro;

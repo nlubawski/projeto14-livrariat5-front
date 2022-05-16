@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import GlobalStyle from "./../globalStyles"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import TelaCadastro from './TelaCadastro'
@@ -10,7 +10,7 @@ import UsuarioContext from "./Contextos/UsuarioContext"
 import TelaCheckout from "./TelaCheckout";
 import TelaConfirmação from "./TelaConfirmação";
 
-function App(){
+function App() {
     const [cliente, setCliente] = useState(null);
     return (
         <>
