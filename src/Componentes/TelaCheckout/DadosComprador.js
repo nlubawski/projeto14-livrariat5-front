@@ -1,5 +1,5 @@
 function DadosComprador(props) {
-
+    
     const {usuario} = props
 
     const {name, email} = usuario

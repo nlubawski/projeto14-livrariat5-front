@@ -5,6 +5,11 @@ import styled from "styled-components";
 import HeaderProdutos from "../Layout/HeaderProdutos";
 
 function TelaLivro() {
+
+    const idLS = localStorage.getItem("id");
+
+    const tokenLS = localStorage.getItem("token");
+
     const { livroId } = useParams();
     const [livro, setLivro] = useState([]);
     const [preço, setPreço] = useState();
@@ -24,12 +29,26 @@ function TelaLivro() {
     }, []);
 
     function acionarCarrinho() {
-        navigate("/carrinho");
-        const promise = axios.post(servidorCarrinho, livro);
-        promise.then(response => {
-            console.log(response);
-        })
-        promise.catch(() => console.log("deu salvar o livro no carrinho"));
+        if (tokenLS === null) {
+            alert ("Faça login para continuar com a operação");
+            // Será que precisa encaminhar pra essa página?
+            navigate("/login");
+        }
+        else {
+            navigate("/carrinho");
+            const body = {
+                title: livro.title,
+                author: livro.author,
+                price: livro.price,
+                image: livro.image,
+                id: idLS
+            }
+            const promise = axios.post(servidorCarrinho, body);
+            promise.then(response => {
+                console.log(response);
+            })
+            promise.catch(() => console.log("deu bom em salvar o livro no carrinho"));
+        }
     }
 
     return (
