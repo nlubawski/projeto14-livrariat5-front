@@ -12,6 +12,7 @@ function HeaderProdutos() {
         if (resultado) {
             navigate("/")
             localStorage.clear();
+            window.location.reload()
         }
     }
     return (
