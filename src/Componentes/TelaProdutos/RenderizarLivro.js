@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-function RenderizarLivro (props) {
-
-    const {title, image, author, id} = props;    
-
+function RenderizarLivro(props) {
+    const { title, image, author, id } = props;
     const navigate = useNavigate();
 
     return (
@@ -14,13 +12,6 @@ function RenderizarLivro (props) {
             <h3>{author}</h3>
         </Border>
     )
-
-//     <Link key={id} to={`/filme/${id}`}>
-//     <div className="image-border" >
-//         <img className="image" src={h3osterURL} />
-//     </div> </Link>)
-// })}
-// </div> */
 }
 
 const Border = styled.div`
@@ -33,7 +24,6 @@ const Border = styled.div`
     justify-content: center;
     align-items: center;
     margin-bottom: 11px;
-
     h2 {
         font-size: 15px;
         font-weight: bold;
@@ -42,20 +32,15 @@ const Border = styled.div`
         margin: 0 15px;
         margin-top: 10px;
     }
-
-
     h3 {
         font-size: 13px;
         text-align: center;
         color: var(--cor-author);
         margin-top: 10px;
     }
-}
 `
-
 const Image = styled.img`
     width: 129px;
     height: 193px;
 `
-
 export default RenderizarLivro;

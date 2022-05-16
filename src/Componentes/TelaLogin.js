@@ -1,5 +1,5 @@
 
-import { useState, useContext} from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -12,7 +12,7 @@ function TelaLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {cliente, setCliente} = useContext(UsuarioContext);
+  const { setCliente } = useContext(UsuarioContext);
 
   function cadastrar(event) {
     event.preventDefault();
@@ -27,19 +27,13 @@ function TelaLogin() {
     });
 
     promise.then((response) => {
-      // const {name, token} = { response };
-      // Mudanças feitas por mim 
-      const {data} = response;
-      // console.log(data);
-      const {name, token, clienteId} = data;
-      console.log("token login:", token);
-      //
-      setCliente({name, token, clienteId});
+      const { data } = response;
+      const { name, token, clienteId } = data;
+      setCliente({ name, token, clienteId });
       setTimeout(() => setLoading(false), 3000);
       localStorage.setItem("nome", name);
       localStorage.setItem("token", token);
       localStorage.setItem("id", clienteId);
-
       navigate('/');
     });
     promise.catch((err) => {
@@ -47,13 +41,14 @@ function TelaLogin() {
       setPassword("");
       console.log(err.response)
       setTimeout(() => setLoading(false), 3000);
+      alert("Tente novamente ou cadastre-se!")
     });
   }
 
   return (
     <>
       <Container>
-        <Logo src={img}/>
+        <Logo src={img} />
         <Formulario onSubmit={cadastrar}>
           <Input
             type="email"
@@ -74,7 +69,7 @@ function TelaLogin() {
           <Botao type="submit">{loading ? <ThreeDots color="#fff" /> : 'Entrar'}
           </Botao>
           <Texto>
-            <Link to="/cadastro">Não tem uma conta? Crie agora!</Link>
+            <NavLink to="/cadastro">Não tem uma conta? Crie agora!</NavLink>
           </Texto>
         </Formulario>
       </Container>
@@ -90,7 +85,6 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #F5980B;
 `;
-
 const Formulario = styled.form`
   display: flex;
   flex-direction: column;
@@ -102,7 +96,7 @@ const Input = styled.input`
   width: 303px;
   border: 1px solid #d4d4d4;
   border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
   color: #666;
@@ -120,7 +114,7 @@ const Botao = styled.button`
   background-color: #FF6C00;
   border: 1px solid #FF8C00;
   border-radius: 5px;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
   color: #fff;
@@ -130,18 +124,20 @@ const Botao = styled.button`
   align-items: center;
 `;
 const Texto = styled.p`
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 14px;
   a{
     color: #fff;
   }
 `;
-
 const Logo = styled.img`
 width: 35%;
 border-radius: 5px;
 padding-bottom: 15px;
+`;
+const NavLink = styled(Link)`
+  text-decoration: none;
 `;
 
 export default TelaLogin;
