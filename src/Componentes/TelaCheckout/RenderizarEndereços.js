@@ -1,39 +1,20 @@
-import { useState, useEffect, useContext} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import UsuarioContext from "../Contextos/UsuarioContext"
 import styled from "styled-components"
 
 function RenderizarEndereços() {
-
-    // const {cliente} = useContext(UsuarioContext);
-
-    // console.log("token por context: ",cliente)
-
     const tokenLS = localStorage.getItem("token");
-
     const idLS = localStorage.getItem("id");
-
-    // console.log("id do cliente: ",idLS);
-
-    // console.log("token: ",tokenLS);
-
-
     const [addresses, setAddresses] = useState([]);
-
-
     const servidorAddress = "http://localhost:5000/address";
-
     const config = {
         headers: {
             "Authorization": `Bearer ${tokenLS}`,
             "id": idLS
         }
     }
-
-
-
     useEffect(() => {
-        const promise = axios.get(servidorAddress,config);
+        const promise = axios.get(servidorAddress, config);
         promise.then((response) => {
             const { data } = response;
             setAddresses(data);
@@ -44,22 +25,21 @@ function RenderizarEndereços() {
         promise.catch(() => console.log("deu ruim baixar as informações dos endereços"));
     }, []);
 
-
-    function deletarEndereço (id) {
+    function deletarEndereço(id) {
         console.log("Entrei na função de deletar o endereço")
         const servidorDeletar = `http://localhost:5000/address/${id}`;
         const promise = axios.delete(servidorDeletar)
         promise.then(response => {
-            const {data} = response;
+            const { data } = response;
             console.log(data);
-            setTimeout(() => window.location.reload(),1000);
+            setTimeout(() => window.location.reload(), 1000);
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
- 
+
     return (
         <>
-           
+
             {addresses.map(address => {
                 const { destinatario, rua, bairro, cep, _id } = address
                 return (
@@ -82,15 +62,13 @@ function RenderizarEndereços() {
 
 const IconDelete = styled.button`
     font-size: 25px;
-    background-color: lightgreen;
+    background-color: #fff;
     border: 0;
-    color: gray;
+    color: red;
     position: absolute;
     top: 10px;
     right: 5px;
 `
-
-
 const Container = styled.div`
     width: 350px;
     min-height: 120px;
@@ -100,7 +78,7 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     padding-left: 10px;
-    background-color: lightgreen;
+    background-color: #fff;
     position: relative;
     margin: 10px 0;
 `

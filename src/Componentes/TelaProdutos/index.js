@@ -5,16 +5,12 @@ import HeaderProdutos from "../Layout/HeaderProdutos";
 import RenderizarLivro from "./RenderizarLivro";
 
 function TelaProdutos() {
-
     const [produtos, setProdutos] = useState([]);
-
     const categoria1 = "Desenvolvimento Pessoal";
     const categoria2 = "Ficção";
     const categoria3 = "Investimentos";
-
     const servidor = "http://localhost:5000/products";
 
-    // Rever no live coding como usar o try catch dentro do use effect
     useEffect(() => {
         const promise = axios.get(servidor);
         promise.then((response) => {
@@ -46,7 +42,7 @@ function TelaProdutos() {
                     if (status === categoria2) {
                         return (
                             <>
-                                <Section> 
+                                <Section>
                                     <h2>{categoria2}</h2>
                                 </Section>
                                 <Books>
