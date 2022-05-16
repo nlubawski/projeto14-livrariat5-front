@@ -8,24 +8,26 @@ import TelaLivro from "./TelaLivro"
 import TelaCarrinho from "./TelaCarrinho"
 import UsuarioContext from "./Contextos/UsuarioContext"
 import TelaCheckout from "./TelaCheckout";
+import TelaConfirmação from "./TelaConfirmação";
 
 function App() {
     const [cliente, setCliente] = useState(null);
     return (
         <>
-            <GlobalStyle />
-            <UsuarioContext.Provider value={{ cliente, setCliente }} >
-                <BrowserRouter>
-                    <Routes>
-                        <Route path='/cadastro' element={<TelaCadastro />} />
-                        <Route path='/login' element={<TelaLogin />} />
-                        <Route path='/' element={<TelaProdutos />} />
-                        <Route path="/products/:livroId" element={<TelaLivro />} />
-                        <Route path='/carrinho' element={<TelaCarrinho />} />
-                        <Route path='/checkout' element={<TelaCheckout />} />
-                    </Routes>
-                </BrowserRouter>
-            </UsuarioContext.Provider>
+        <GlobalStyle />
+        <UsuarioContext.Provider  value={{cliente, setCliente}} >
+        <BrowserRouter>
+        <Routes>
+            <Route path='/cadastro' element={<TelaCadastro />} />
+            <Route path='/login' element={<TelaLogin />} />
+            <Route path='/' element={<TelaProdutos />} />
+            <Route path="/products/:livroId" element={<TelaLivro />} />
+            <Route path='/carrinho' element={<TelaCarrinho />} />
+            <Route path='/checkout' element={<TelaCheckout />} />
+            <Route path='/confirmacao' element={<TelaConfirmação />} />
+        </Routes>
+        </BrowserRouter>
+        </UsuarioContext.Provider>
         </>
     )
 }
