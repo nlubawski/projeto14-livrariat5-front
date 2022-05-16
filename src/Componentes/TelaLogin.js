@@ -2,12 +2,17 @@
 import { useState, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import dotenv from "dotenv"
 import { useNavigate, Link } from "react-router-dom";
 import { ThreeDots } from 'react-loader-spinner';
 import img from "./../imagens/livrariat5logo.png";
 import UsuarioContext from "./Contextos/UsuarioContext"
 
 function TelaLogin() {
+
+  dotenv.config();
+  const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,8 +23,7 @@ function TelaLogin() {
     event.preventDefault();
     setLoading(true);
 
-    const URL =
-      "http://localhost:5000/login";
+    const URL = `${URL_ENV}/login`;
 
     const promise = axios.post(URL, {
       email,

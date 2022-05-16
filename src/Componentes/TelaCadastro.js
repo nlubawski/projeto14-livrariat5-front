@@ -1,11 +1,16 @@
 import { useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
+import dotenv from "dotenv"
 import { useNavigate, Link } from "react-router-dom";
 import { ThreeDots } from 'react-loader-spinner';
 import img from "./../imagens/livrariat5logo.png";
 
 function TelaCadastro() {
+
+  dotenv.config();
+  const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,8 +22,7 @@ function TelaCadastro() {
     event.preventDefault();
     setLoading(true);
 
-    const URL =
-      "http://localhost:5000/cadastrar";
+    const URL =`${URL_ENV}/cadastrar`;
 
     const promise = axios.post(URL, {
       name,

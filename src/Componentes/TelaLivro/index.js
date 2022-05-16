@@ -1,11 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import dotenv from "dotenv"
 import styled from "styled-components";
 import HeaderProdutos from "../Layout/HeaderProdutos";
 
 function TelaLivro() {
 
+  dotenv.config();
+
+  const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+  
     const idLS = localStorage.getItem("id");
 
     const tokenLS = localStorage.getItem("token");
@@ -14,10 +19,10 @@ function TelaLivro() {
     const [livro, setLivro] = useState([]);
     const [preço, setPreço] = useState();
     const navigate = useNavigate();
-    const servidorCarrinho = "http://localhost:5000/carrinho"
+    const servidorCarrinho = `${URL_ENV}/carrinho`
 
     useEffect(() => {
-        const promise = axios.get(`http://localhost:5000/products/${livroId}`);
+        const promise = axios.get(`${URL_ENV}/products/${livroId}`);
         promise.then((response) => {
             const { data } = response;
             setPreço(data.price.replace(".", ","));
