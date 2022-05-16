@@ -16,7 +16,7 @@ function TelaCheckout() {
     const idLS = localStorage.getItem("id");
     const tokenLS = localStorage.getItem("token");
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const [user, setUser] = useState([]);
 
@@ -33,10 +33,8 @@ function TelaCheckout() {
         const promise = axios.get(servidorCheckout, config);
         promise.then((response) => {
             const { data } = response;
-            setUser(data);
-            // TIRAR DEPOIS ESSE CONSOLE
-            console.log("Deu bom a requisição")
             console.log(data);
+            setUser(data);
         })
         promise.catch(() => console.log("deu ruim baixar as informações do usuário"));
     }, []);
@@ -69,7 +67,6 @@ function TelaCheckout() {
     }
 
     function ativarPagamento(id) {
-        console.log("Clicado com sucesso");
         const jaSelecionado = pagamentoSelecionado.has(id);
         if (jaSelecionado) {
             pagamentoSelecionado.delete(id);
@@ -81,7 +78,6 @@ function TelaCheckout() {
         }
     }
 
-    // Requisição pra salvar o endereço no banco de dados
     const URL_ADDRESS = `${URL_ENV}/address`;
 
     function cadastrarEndereço(event) {
@@ -112,12 +108,10 @@ function TelaCheckout() {
     }, []);
 
     function deletarLivro(id) {
-        console.log("Entrei na função de deletar")
         const servidorDelete = `http://localhost:5000/carrinho/${id}`
         const promise = axios.delete(servidorDelete)
         promise.then(response => {
             const { data } = response;
-            console.log(data);
             setTimeout(() => window.location.reload(), 100);
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
@@ -128,10 +122,10 @@ function TelaCheckout() {
             alert ("Selecione um endereço de entrega")
         }
         else if ([...pagamentoSelecionado.keys()][0] === undefined) {
-            alert ("Selecione uma fomra de pagamento")
+            alert ("Selecione uma forma de pagamento")
         }
         else {
-            const URL_Confirmacao = `http://localhost:5000/finalizar`
+            const URL_Confirmacao = `${URL_ENV}/checkout`
             const body = {
                 nome: user.name,
                 email: user.email,
@@ -139,8 +133,10 @@ function TelaCheckout() {
                 payment: [...pagamentoSelecionado.keys()][0],
                 id: idLS,
             }
+            console.log(body);
             const promise = axios.post(URL_Confirmacao, body);
             promise.then(response => {
+                console.log(response.data);
                 alert("Compra concluída com sucesso. Obrigado por escolher a nossa loja!");
                 navigate("/")
             })
