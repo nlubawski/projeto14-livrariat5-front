@@ -27,7 +27,6 @@ function TelaCarrinho() {
         const promise = axios.get(URL_CARRINHO, config);
         promise.then((response) => {
             const { data } = response;
-            console.log(data);
             setCarrinho(data);
         })
         promise.catch(() => console.log("deu ruim :/"));
@@ -55,7 +54,6 @@ function TelaCarrinho() {
         const promise = axios.delete(servidorDelete)
         promise.then(response => {
             const { data } = response;
-            console.log(data);
             setTimeout(() => window.location.reload(), 100);
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
@@ -167,8 +165,7 @@ const Finalizar = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-
+`
 const EscolherMais = styled.button`
     height: 25px;
     width: 203px;
@@ -186,7 +183,7 @@ const EscolherMais = styled.button`
 `;
 const NavLink = styled(Link)`
     text-decoration: none;
-`;
+`
 const IconDelete = styled.button`
     font-size: 22px;
     background-color: none;
@@ -203,5 +200,4 @@ const Box = styled.div`
         font-weight:bold;
     }
 `
-
 export default TelaCarrinho

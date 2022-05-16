@@ -25,7 +25,6 @@ const Info = styled.div`
 const Span = styled.span`
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
-    
-    `
+`
 
 export default DadosComprador

@@ -27,8 +27,6 @@ function TelaLivro() {
             const { data } = response;
             setPreço(data.price.replace(".", ","));
             setLivro(data);
-            console.log("Id do livro: ", livroId);
-
         })
         promise.catch(() => console.log("deu ruim renderizar o livro selecionado"));
     }, []);
@@ -36,7 +34,6 @@ function TelaLivro() {
     function acionarCarrinho() {
         if (tokenLS === null) {
             alert ("Faça login para continuar com a operação");
-            // Será que precisa encaminhar pra essa página?
             navigate("/login");
         }
         else {

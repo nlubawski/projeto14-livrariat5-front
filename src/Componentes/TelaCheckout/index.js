@@ -7,7 +7,6 @@ import DadosComprador from "./DadosComprador";
 import RenderizarEndereços from "./RenderizarEndereços";
 import { useNavigate } from "react-router-dom";
 
-
 function TelaCheckout() {
 
     dotenv.config();
@@ -44,7 +43,6 @@ function TelaCheckout() {
 
     const [pagamentoSelecionado, setPagamentoSelecionado] = useState(new Map());
 
-    // Estados usados nos inputs
     const [destinatario, setDestinatario] = useState("");
     const [rua, setRua] = useState("");
     const [bairro, setBairro] = useState("");
@@ -164,11 +162,11 @@ function TelaCheckout() {
                     <form onSubmit={cadastrarEndereço}>
                         <SubContainer>
                             <h4>Insira o nome do destinatario</h4>
-                            <Input type="text" placeholder="Destinatario" 
+                            <Input type="text" placeholder="Destinatario" required
                                 value={destinatario} onChange={(e) => setDestinatario(e.target.value)}
                             />
                             <h4>Insira o nome da rua</h4>
-                            <Input type="text" placeholder="Rua" 
+                            <Input type="text" placeholder="Rua" required
                                 value={rua} onChange={(e) => setRua(e.target.value)}
                             />
                             <h4>Insira o nome do bairro</h4>
