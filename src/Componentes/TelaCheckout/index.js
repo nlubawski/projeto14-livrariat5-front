@@ -57,7 +57,7 @@ function TelaCheckout() {
     const formasPagamento = [
         { opção: "Cartão de crédito", icone: "card-outline", id: "1" },
         { opção: "Boleto", icone: "barcode-outline", id: "2" },
-        { opção: "Cash", icone: "cash-outline", id: "3" }
+        { opção: "Pix", icone: "cash-outline", id: "3" }
     ]
 
     function zerarinputs() {
@@ -253,10 +253,9 @@ const Border = styled.div`
 const Description = styled.div`
     width: 100px;
     margin-right: 25px;
-    background-color: red;
+    background-color: white;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-
     h4 {
         font-size: 12px;
         margin-left: 10px;
@@ -303,8 +302,9 @@ const Payment = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    background-color: lightblue;
+    background-color: #ffa920;
     border: ${(props) => corBorda(props.selecionado)};
+    border-radius: 5px;
 `
 const IconPay = styled.button`
     font-size: 25px;
@@ -324,6 +324,10 @@ const SubContainer = styled.div`
     position: relative;
 `
 const Container = styled.div`
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color:  #fff;
     width: 100vw;
     padding-left: 5px;
@@ -338,7 +342,7 @@ const Container = styled.div`
         padding-top: 10px;
         margin-bottom: 20px;
         font-family: 'Roboto', sans-serif;
-        font-weight: 400;
+        font-weight: 700;
     }
     h2 {
         font-size: 15px;

@@ -43,11 +43,17 @@ const Container = styled.div`
     align-items: center;
     position: relative;
 `
+// const Logo = styled.img`
+//     width: 25%;
+//     border-radius: 5px;
+//     
+// `
+
 const Logo = styled.img`
-    width: 25%;
+    height: 67px;
     border-radius: 5px;
     position: absolute;
-    left: 10px;
+    left: 15px;
 `
 const User = styled.p`
     font-size: 18px;
