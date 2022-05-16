@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import dotenv from "dotenv";
 import styled from "styled-components";
 import HeaderCheckout from "./../Layout/HeaderCheckout";
 import DadosComprador from "./DadosComprador";
 import RenderizarEndereços from "./RenderizarEndereços";
+import { useNavigate } from "react-router-dom";
+
 
 function TelaCheckout() {
+
+    dotenv.config();
+
+    const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
     const idLS = localStorage.getItem("id");
     const tokenLS = localStorage.getItem("token");
+
+    const navigate = useNavigate()
 
     const [user, setUser] = useState([]);
 
@@ -18,7 +27,7 @@ function TelaCheckout() {
         }
     }
 
-    const servidorCheckout = "http://localhost:5000/checkout";
+    const servidorCheckout = `${URL_ENV}/checkout`;
 
     useEffect(() => {
         const promise = axios.get(servidorCheckout, config);
@@ -32,17 +41,10 @@ function TelaCheckout() {
         promise.catch(() => console.log("deu ruim baixar as informações do usuário"));
     }, []);
 
-    // console.log("id do cliente: ", idLS);
 
-    // Mapa criado pra selecionar apenas um endereço
     const [endereçoSelecionado, setEndereçoSelecionado] = useState(new Map());
 
     const [pagamentoSelecionado, setPagamentoSelecionado] = useState(new Map());
-
-    /* Na hora de enviar para o servidor fazer o seguinte:
-     endereço: [...endereçoSelecionado.keys()]
-     Ele vai mandar apenas o id do endereço selecionado, dai usar o filtro
-     no backend para devolver num get apenas esse endereço do banco*/
 
     // Estados usados nos inputs
     const [destinatario, setDestinatario] = useState("");
@@ -51,8 +53,6 @@ function TelaCheckout() {
     const [cep, setCep] = useState("");
     const [livros, setLivros] = useState([]);
     const [visivel, setVisivel] = useState(false);
-    const [cartao, setCartao] = useState(false);
-    const [boleto, setBoleto] = useState(false);
 
     const formasPagamento = [
         { opção: "Cartão de crédito", icone: "card-outline", id: "1" },
@@ -74,7 +74,6 @@ function TelaCheckout() {
         if (jaSelecionado) {
             pagamentoSelecionado.delete(id);
             setPagamentoSelecionado(new Map(pagamentoSelecionado));
-            console.log("Nada acontece")
         }
         else {
             pagamentoSelecionado.clear();
@@ -83,11 +82,11 @@ function TelaCheckout() {
     }
 
     // Requisição pra salvar o endereço no banco de dados
-    const URL = "http://localhost:5000/address";
+    const URL_ADDRESS = `${URL_ENV}/address`;
 
     function cadastrarEndereço(event) {
         event.preventDefault();
-        const promise = axios.post(URL, {
+        const promise = axios.post(URL_ADDRESS, {
             destinatario,
             rua,
             bairro,
@@ -100,10 +99,10 @@ function TelaCheckout() {
         })
     }
 
-    const servidor = `http://localhost:5000/carrinho`;
+    const URL_CARRINHO = `${URL_ENV}/carrinho`;
 
     useEffect(() => {
-        const promise = axios.get(servidor, config);
+        const promise = axios.get(URL_CARRINHO, config);
         promise.then((response) => {
             const { data } = response;
             console.log(data);
@@ -125,22 +124,28 @@ function TelaCheckout() {
     }
 
     function finalizarCompra () {
-        const URL_Confirmacao = `http://localhost:5000/finalizar`
-        const body = {
-            nome: user.name,
-            email: user.email,
-            address: [...endereçoSelecionado.keys()][0],
-            payment: [...pagamentoSelecionado.keys()][0],
-            id: idLS,
+        if ([...endereçoSelecionado.keys()][0] === undefined) {
+            alert ("Selecione um endereço de entrega")
         }
-        console.log(body.nome);
-
-        const promise = axios.post(URL_Confirmacao, body);
-        promise.then(response => {
-            const { data } = response;
-            console.log(data);
-        })
-        promise.catch(() => console.log("deu ruim em finalizar a compra"));
+        else if ([...pagamentoSelecionado.keys()][0] === undefined) {
+            alert ("Selecione uma fomra de pagamento")
+        }
+        else {
+            const URL_Confirmacao = `http://localhost:5000/finalizar`
+            const body = {
+                nome: user.name,
+                email: user.email,
+                address: [...endereçoSelecionado.keys()][0],
+                payment: [...pagamentoSelecionado.keys()][0],
+                id: idLS,
+            }
+            const promise = axios.post(URL_Confirmacao, body);
+            promise.then(response => {
+                alert("Compra concluída com sucesso. Obrigado por escolher a nossa loja!");
+                navigate("/")
+            })
+            promise.catch(() => console.log("deu ruim em finalizar a compra"));
+        }
     }
     
     return (
@@ -163,11 +168,11 @@ function TelaCheckout() {
                     <form onSubmit={cadastrarEndereço}>
                         <SubContainer>
                             <h4>Insira o nome do destinatario</h4>
-                            <Input type="text" placeholder="Destinatario" required
+                            <Input type="text" placeholder="Destinatario" 
                                 value={destinatario} onChange={(e) => setDestinatario(e.target.value)}
                             />
                             <h4>Insira o nome da rua</h4>
-                            <Input type="text" placeholder="Rua" required
+                            <Input type="text" placeholder="Rua" 
                                 value={rua} onChange={(e) => setRua(e.target.value)}
                             />
                             <h4>Insira o nome do bairro</h4>

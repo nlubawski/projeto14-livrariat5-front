@@ -1,15 +1,20 @@
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import dotenv from "dotenv";
 import { useNavigate, Link } from "react-router-dom";
 import HeaderProdutos from "../Layout/HeaderProdutos";
 import UsuarioContext from "./../Contextos/UsuarioContext"
 
 function TelaCarrinho() {
+
+    dotenv.config();
+    const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+    
     const idLS = localStorage.getItem("id");
     const tokenLS = localStorage.getItem("token");
     const [carrinho, setCarrinho] = useState([]);
-    const servidor = `http://localhost:5000/carrinho`;
+    const URL_CARRINHO = `${URL_ENV}/carrinho`;
     const { cliente } = useContext(UsuarioContext);
     const navigate = useNavigate();
     const config = {
@@ -19,7 +24,7 @@ function TelaCarrinho() {
         }
     }
     useEffect(() => {
-        const promise = axios.get(servidor, config);
+        const promise = axios.get(URL_CARRINHO, config);
         promise.then((response) => {
             const { data } = response;
             console.log(data);
@@ -41,22 +46,6 @@ function TelaCarrinho() {
         }
         else {
             navigate("/checkout")
-            // VERIFICAR COM NATHAN ESSA REQUISIÇÃO
-            // const body = {
-            //     name: nomeLS,
-            //     id: idLS
-            // };
-            // const headers = {
-            //     headers: { "Authorization": `Bearer ${tokenLS}` }
-            // }
-            // try {
-            //     await axios.post("http://localhost:5000/finalizar", body, headers);
-            //     alert("Registro feito com sucesso!");
-            //     navigate("/checkout");
-            // } catch (error) {
-            //     console.log("Erro ao tentar finalizar");
-            //     console.log(error);
-            // }
         }
     }
 

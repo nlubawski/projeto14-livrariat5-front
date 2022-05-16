@@ -1,25 +1,22 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import dotenv from "dotenv";
 import styled from "styled-components"
 
 function RenderizarEndereços(props) {
 
+    dotenv.config();
+
+    const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+
     const {endereçoSelecionado, setEndereçoSelecionado} = props;
-
-    // const {cliente} = useContext(UsuarioContext);
-
-    // console.log("token por context: ",cliente)
 
     const tokenLS = localStorage.getItem("token");
     const idLS = localStorage.getItem("id");
 
-    // console.log("id do cliente: ",idLS);
-
-    // console.log("token: ",tokenLS);
-
     const [addresses, setAddresses] = useState([]);
 
-    const servidorAddress = "http://localhost:5000/address";
+    const URL_ADDRESS = `${URL_ENV}/address`;
     const config = {
         headers: {
             "Authorization": `Bearer ${tokenLS}`,
@@ -27,13 +24,10 @@ function RenderizarEndereços(props) {
         }
     }
     useEffect(() => {
-        const promise = axios.get(servidorAddress, config);
+        const promise = axios.get(URL_ADDRESS, config);
         promise.then((response) => {
             const { data } = response;
             setAddresses(data);
-            // TIRAR DEPOIS ESSE CONSOLE
-            // console.log("Deu bom a requisição dos endereços")
-            // console.log(data);
         })
         promise.catch(() => console.log("deu ruim baixar as informações dos endereços"));
     }, []);
@@ -49,21 +43,18 @@ function RenderizarEndereços(props) {
         })
         promise.catch(() => console.log("deu ruim em deletar o endereço"));
     }
- 
-    // ATÉ AGORA, CADA CLIQUE QUE EU DOU, SE NÃO TEM O ID ELE COLOCA, E SE TEM, ELE TIRA. 
-    // PRECISO FAZER COM QUE QUANDO COLOCA O ID EM UM ITEM, RETIRA O ID DOS OUTROS.
+
     function ativarEndereço (id) {
         console.log("Clicado com sucesso");
-        const jaSelecionado = endereçoSelecionado.has(id); // Pergunta pro meu estado se ele já tem esse id, retorna true ou false
-        if (jaSelecionado) { // Se eu já tinha selecionado e clicar de novo
-            endereçoSelecionado.delete(id); // eu preciso tirar o id do mapa
-            setEndereçoSelecionado(new Map(endereçoSelecionado)); // atualizo o mapa sem o id que acabei de clicar
+        const jaSelecionado = endereçoSelecionado.has(id); 
+        if (jaSelecionado) { 
+            endereçoSelecionado.delete(id); 
+            setEndereçoSelecionado(new Map(endereçoSelecionado)); 
             console.log("Nada acontece")
         }
-        else { // Se eu estou clicando pela primeira vez
+        else { 
             endereçoSelecionado.clear();
             setEndereçoSelecionado(new Map(endereçoSelecionado.set(id)));
-            // atualizo o mapa colocando as informações do id nele
         }
     }
 
@@ -72,10 +63,6 @@ function RenderizarEndereços(props) {
             {addresses.map(address => {
                 const { destinatario, rua, bairro, cep, _id } = address;
                 const checkSelecionado = endereçoSelecionado.has(_id)
-                // Meus endereços selecionados tem esse id? Lembrando que o id é iterado
-                // Cada vez que clico em um dia, o estado é alterado, então o componente é novamente renderizado.
-                // Ao clicar, eu atualizo meu mapa, então esse if vai achar o id no mapa
-                // Ao achar o id no mapa, vai alterar a prop abaixo de selecionado para true
                 return (
                     <>
                         <Container selecionado={checkSelecionado} key={_id} onClick={() => ativarEndereço(_id)}>
