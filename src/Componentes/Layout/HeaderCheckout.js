@@ -43,12 +43,6 @@ const Container = styled.div`
     align-items: center;
     position: relative;
 `
-// const Logo = styled.img`
-//     width: 25%;
-//     border-radius: 5px;
-//     
-// `
-
 const Logo = styled.img`
     height: 67px;
     border-radius: 5px;
@@ -71,5 +65,4 @@ const IconLogout = styled.button`
     border-radius: 5px;
     margin-right: 8px;
 `
-
 export default HeaderCheckout

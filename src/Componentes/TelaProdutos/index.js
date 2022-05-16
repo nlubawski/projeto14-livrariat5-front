@@ -11,10 +11,6 @@ function TelaProdutos() {
 
     const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
 
-    // const teste = process.env.SERVER_URL 
-
-    // console.log(teste);
-
     const [produtos, setProdutos] = useState([]);
     const categoria1 = "Recomendados";
     const categoria2 = "Desenvolvimento Pessoal";
