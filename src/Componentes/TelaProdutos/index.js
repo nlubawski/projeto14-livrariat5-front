@@ -9,7 +9,7 @@ function TelaProdutos() {
 
     dotenv.config();
 
-    const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+    const URL_ENV = process.env.REACT_APP_SERVER_URL || "http://localhost:5000"
 
     const [produtos, setProdutos] = useState([]);
     const categoria1 = "Recomendados";
