@@ -9,7 +9,8 @@ import img from "./../imagens/livrariat5logo.png";
 function TelaCadastro() {
 
   dotenv.config();
-  const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+  //const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+  const URL_ENV = "https://livrariat5.herokuapp.com"
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 function TelaCheckout() {
 
     dotenv.config();
-
-    const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+    const URL_ENV = "https://livrariat5.herokuapp.com"
+    //const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
     const idLS = localStorage.getItem("id");
     const tokenLS = localStorage.getItem("token");
 

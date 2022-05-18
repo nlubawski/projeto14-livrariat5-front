@@ -9,8 +9,9 @@ import UsuarioContext from "./../Contextos/UsuarioContext"
 function TelaCarrinho() {
 
     dotenv.config();
-    const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
-    
+    //const URL_ENV = process.env.SERVER_URL || "http://localhost:5000"
+    const URL_ENV = "https://livrariat5.herokuapp.com"
+
     const idLS = localStorage.getItem("id");
     const tokenLS = localStorage.getItem("token");
     const [carrinho, setCarrinho] = useState([]);
