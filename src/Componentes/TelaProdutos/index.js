@@ -9,8 +9,9 @@ function TelaProdutos() {
 
     dotenv.config();
 
-    const URL_ENV = process.env.REACT_APP_SERVER_URL || "http://localhost:5000"
-
+    //const URL_ENV = process.env.REACT_APP_SERVER_URL || "http://localhost:5000"
+    const URL_ENV = "https://livrariat5.herokuapp.com"
+    
     const [produtos, setProdutos] = useState([]);
     const categoria1 = "Recomendados";
     const categoria2 = "Desenvolvimento Pessoal";
